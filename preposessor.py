@@ -14,14 +14,24 @@ def preprocess(data):
         if "PM" in val:
             da.append(val.replace('PM', ''))
             am_pm.append('PM')
-        else:
+        elif "pm" in val:
+            da.append(val.replace('pm', ''))
+            am_pm.append('pm')
+        elif "AM" in val:
             da.append(val.replace('AM', ''))
             am_pm.append('AM')
+        else:
+            da.append(val.replace('am', ''))
+            am_pm.append('am')
 
     df = pd.DataFrame({'user_message': message, 'Message_data': da})
 
     # convert message_data type
-    df['Message_data'] = pd.to_datetime(df['Message_data'], format='%m/%d/%y, %H:%M - ')
+    # df['Message_data'] = pd.to_datetime(df['Message_data'], format='%m/%d/%y, %H:%M - ')
+    try:
+        df['Message_data'] = pd.to_datetime(df['Message_data'], format='%m/%d/%y, %H:%M - ')
+    except:
+        df['Message_data'] = pd.to_datetime(df['Message_data'], format='%d/%m/%Y, %H:%M - ')
 
     df.rename(columns={'Message_data': 'datetime'}, inplace=True)
 
